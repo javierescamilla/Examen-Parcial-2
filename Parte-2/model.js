@@ -14,7 +14,7 @@ let Schema = mongoose.Schema({
 let  = mongoose.model('bookmarks', Schema);
 
 let modelMethods = {
-    get : function(id, jsonBody){
+    put : function(id, jsonBody){
         return bookmarks.updateOne(id, jsonBody) 
                 .then( response => {
                         return response;
