@@ -9,6 +9,45 @@ let app = express();
 let server;
 
 /* Tu código va aquí */
+app.put('/api/bookmarks/:id', jsonParser, (req, res, next) => {
+	let bodyID = req.body.id;
+	let bodyTitle = req.body.title;
+	let bodyDescription = req.body.description;
+	let bodyURL = req.body.url;
+    if(!bodyID) {
+        res.statusMessage = "Missing id";
+        return res.status(406).json({
+        	"error" : "Missing id",
+            "status" : 406
+       });
+	}
+	if(bodyID != paramId){
+        res.statusMessage = "Missmatching IDs";
+        return res.status(406).json({
+           "error" : "Missmatching IDs",
+           "status" : 409
+       });		
+	}
+	if(!bodyTitle & !bodyDescription & !bodyURL){
+		res.statusMessage = "Missing field to update";
+		return res.status(406).json({
+			"error" : "Missing field to update",
+			"status" : 406
+		})
+	}
+    modelMethods.put({ id : filterID }, req.body)
+       .then(bookmark => {
+           res.status(202).json(bookmark);
+       })
+       .catch(err => {
+           res.statusMessage = "Missing field in body";
+           return res.status(500).json({
+               "error" : "Something went wrong",
+               "status" : 500
+           });
+       });
+});
+
 
 function runServer( port, databaseUrl ){
 	return new Promise( (resolve, reject ) => {
